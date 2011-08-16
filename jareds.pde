@@ -27,6 +27,8 @@ int steerp2 = 5;
 //store variables of distance sensors, i like these global 
 int l,r;
 
+int val = 0; //<<----- delete me - just a dummy
+
 /*
   The setup block is the first block run before going into loop(), 
   it's a good idea to set your pin modes here, i also use the serial output for debugging
@@ -61,12 +63,69 @@ void loop() {
   Serial.print(l, DEC);
   Serial.print("\t Right: \t");
   Serial.println(r,DEC);
-  //drive logic
-
+  //drive logic/brains need to go in here.. 
+  
   //i dont need an accurate delay, so i'll use a cheap delay
   delay(100);
 
 }
+/*
+  PWM - at 5v analog signal
+  see the 5 states:
+  http://www.arduino.cc/en/Tutorial/PWM
+  
+  keep on calling forward() to increase the speed.
+*/
+void forward() {
+  val = (val + 10) % 5;    // one of 5 states
+  analogWrite(drivep1, val);  
+  analogWrite(drivep2, 0);  
+}
+
+void reverse() {
+  val = (val + 10) % 5;    // one of 5 states
+  analogWrite(drivep1, 0);  
+  analogWrite(drivep2, val);  
+}
+
+/*
+if you have a cheap toy, 
+it probably doesn't have precission stearing.. 
+use digital - lower voltage on or off
+*/
+
+void left() {
+  digitalWrite(steerp1,HIGH);
+  digitalWrite(steerp2,LOW);
+}
+void right() {
+  digitalWrite(steerp1,HIGH);
+  digitalWrite(steerp2,LOW);
+}
+      
+
+/* 
+  either on or off - no PWM 1.5v
+*/
+void forward() {
+  digitalWrite(drivep1,HIGH);
+  digitalWrite(drivep2,LOW);
+}
+
+void reverse() {
+  digitalWrite(drivep1,LOW);
+  digitalWrite(drivep2,HIGH);
+}
+
+void left() {
+  digitalWrite(steerp1,HIGH);
+  digitalWrite(steerp2,LOW);
+}
+void right() {
+  digitalWrite(steerp1,HIGH);
+  digitalWrite(steerp2,LOW);
+}
+
 
 void ping() {
  //get a distance.. first make sure it's off
