@@ -77,7 +77,7 @@ void loop() {
   keep on calling forward() to increase the speed.
 */
 void forward() {
-  val = (val + 10) % 5;    // one of 5 states
+  val = (val + 10) % 255;    //remember only 5 states
   analogWrite(drivep1, val);  
   analogWrite(drivep2, 0);  
 }
